@@ -31,10 +31,16 @@ function create(post) {
     })
 }
 
-function update() {
-  return Promise.resolve('update wired')
+function update(id, post) {
+  // UPDATE posts SET title = 'foo', contents = 'bar' WHERE id = 1;
+  return db('posts').update(post).where('id', id)
+    .then(() => {
+      return getById(id)
+    })
 }
-
-function remove() {
-  return Promise.resolve('delete wired')
+async function remove(id) {
+  // DELETE FROM posts WHERE id = 1;
+  const postToDelete = await getById(id)
+  await db('posts').delete().where('id', id)
+  return Promise.resolve(postToDelete)
 }
